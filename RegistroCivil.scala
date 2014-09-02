@@ -6,7 +6,7 @@ import scala.concurrent.duration._
 import io.gatling.http.response._
 
 
-  class registroCivil extends Simulation { 
+  class registroCivil extends Simulation {
 
   val httpConf = http
     .baseURL("https://181.112.147.247:8443/")
@@ -31,12 +31,13 @@ import io.gatling.http.response._
    .pause(4)
 
     .exec(http("Registro civil")
-      .post("busqueda?cedula=1111111116")
+      .get("busqueda?cedula=1111111116")
       .header("Content-Type", "application/json; charset=UTF-8")
-      .check(status.is(401))
+      .header("Authorization", "Bearer ${bearer}")
+      .check(status.is(200))
     )
     .pause(4)
-    
+
     setUp(
     login.inject(atOnceUsers(10)).protocols(httpConf)
     )
