@@ -6,10 +6,10 @@ import scala.concurrent.duration._
 import io.gatling.http.response._
 
 
-  class loginPage extends Simulation { 
+  class loginPage extends Simulation {
 
   val httpConf = http
-    .baseURL("https://181.112.147.247:8443/")
+    .baseURL("https://10.0.9.212:8443/")
     .acceptHeader("*/*")
     .acceptEncodingHeader("gzip, deflate")
     .acceptLanguageHeader("en-us,en;q=0.5")
@@ -61,7 +61,7 @@ import io.gatling.http.response._
             .check(status.is(201))
     )
     .pause(4)
-    
+
      .exec(http("Listar usuarios")
       .get("usuario/todos")
       .header("Content-Type", "application/json; charset=UTF-8")
@@ -77,10 +77,10 @@ import io.gatling.http.response._
       .check(status.is(200))
     )
     .pause(4)
-    
+
   setUp(
     login.inject(
-      atOnceUsers(500))
+      atOnceUsers(10))
       .protocols(httpConf)
   )
 }

@@ -9,7 +9,7 @@ import io.gatling.http.response._
   class registroCivil extends Simulation {
 
   val httpConf = http
-    .baseURL("https://181.112.147.247:8443/")
+    .baseURL("https://10.0.9.212:8443/")
     .acceptHeader("*/*")
     .acceptEncodingHeader("gzip, deflate")
     .acceptLanguageHeader("en-us,en;q=0.5")
