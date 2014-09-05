@@ -17,21 +17,25 @@ import io.gatling.http.response._
     .connection("keep-alive")
     .userAgentHeader("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.116 Safari/537.36")
 
+   val credenciales = csv("credenciales.csv").random
+   val cedulas = csv("cedulas.csv").random
    val login = scenario("Validar cedula")
+    .feed(credenciales)
     .exec(http("Identificacion")
       .post("identificacion")
       .header("Content-Type", "application/json; charset=UTF-8")
       .body(StringBody(
         """{
-              "nombreUsuario": "admin",
-              "contrasenia": "Sni3s3Adm1nTW"
+              "nombreUsuario":"${usuario}",
+              "contrasenia":"${contrasenia}"
         }""")).asJSON
       .check(status.is(201), bodyString.saveAs("bearer"))
     )
    .pause(4)
 
+    .feed(cedulas)
     .exec(http("Registro civil")
-      .get("busqueda?cedula=1111111116")
+      .get("busqueda?cedula=${cedula}")
       .header("Content-Type", "application/json; charset=UTF-8")
       .header("Authorization", "Bearer ${bearer}")
       .check(status.is(200))
