@@ -43,6 +43,7 @@ import io.gatling.http.response._
     .pause(4)
 
     setUp(
-    login.inject(atOnceUsers(10)).protocols(httpConf)
+    login.inject(rampUsersPerSec(1) to(5) during(1 minutes))
+    .protocols(httpConf)
     )
   }
