@@ -40,23 +40,6 @@ class AdministrarUsuario extends Simulation {
 
   val administrarUsuario = scenario("Administrar usuario")
     .exec((session: Session) => session.set("tokenUnico", AdministrarUsuario.token))
-    .exec(http("Crear usuario")
-      .post(urlBase + ":8443/usuario")
-      .header("Content-Type", "application/json; charset=UTF-8")
-      .header("Authorization", "${tokenUnico}")
-      .body(StringBody(
-        """{
-              "identificacion":{"tipoDocumento":"pasaporte","numeroIdentificacion":"AGAH"},
-              "nombre":{"primerNombre":"ana","primerApellido":"ana"},
-              "institucion":{"id":"2005"},"perfiles":[1],
-              "emailInstitucional":"seneteam@gmail.com",
-              "numeroAutorizacionQuipux":"SENESCYT-AB-2014-12345-MI",
-              "finDeVigencia":"2014-10-30",
-              "nombreUsuario":"lala","estado":"ACTIVO"
-        }""")).asJSON
-      .check(status.is(201))
-    ).pause(4)
-
     .exec(http("Crear perfil")
       .post(urlBase + ":8443/perfiles")
       .header("Content-Type", "application/json; charset=UTF-8")
@@ -90,12 +73,31 @@ class AdministrarUsuario extends Simulation {
       .header("Authorization", "${tokenUnico}")
       .check(status.is(200))
     ).pause(4)
+
+  val crearUsuario = scenario("Crear usuario")
+    .exec((session: Session) => session.set("tokenUnico", AdministrarUsuario.token))
+    .exec(http("Crear usuario")
+      .post(urlBase + ":8443/usuario")
+      .header("Content-Type", "application/json; charset=UTF-8")
+      .header("Authorization", "${tokenUnico}")
+      .body(StringBody(
+        """{
+              "identificacion":{"tipoDocumento":"pasaporte","numeroIdentificacion":"AGAH"},
+              "nombre":{"primerNombre":"ana","primerApellido":"ana"},
+              "institucion":{"id":"2005"},"perfiles":[1],
+              "emailInstitucional":"seneteam@gmail.com",
+              "numeroAutorizacionQuipux":"SENESCYT-AB-2014-12345-MI",
+              "finDeVigencia":"2014-10-30",
+              "nombreUsuario":"lala","estado":"ACTIVO"
+        }""")).asJSON
+      .check(status.is(201))
+    ).pause(4)
   
   setUp(
       login.inject(atOnceUsers(1)),
-      administrarUsuario.inject(
-        nothingFor(10),
-        rampUsersPerSec(1) to(5) during(30 minutes)
-      )
+      crearUsuario.inject(nothingFor(10),
+        atOnceUsers(1)),
+      administrarUsuario.inject(nothingFor(10),
+        rampUsersPerSec(1) to(5) during(60 minutes))
     ).protocols(httpConf)
 }
