@@ -86,6 +86,6 @@ class CatalogosTitulosExtranjeros extends Simulation {
   setUp(
       login.inject(atOnceUsers(1)),
       catalogo.inject(nothingFor(10),
-        rampUsersPerSec(1) to(5) during(10 minutes))
+        rampUsersPerSec(1) to(3) during(10 minutes))
     ).protocols(httpConf)
 }
