@@ -98,6 +98,6 @@ class AdministrarUsuario extends Simulation {
       crearUsuario.inject(nothingFor(10),
         atOnceUsers(1)),
       administrarUsuario.inject(nothingFor(10),
-        rampUsersPerSec(1) to(5) during(10 minutes))
+        rampUsersPerSec(1) to(3) during(10 minutes))
     ).protocols(httpConf)
 }
