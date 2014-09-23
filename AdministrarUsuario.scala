@@ -10,7 +10,7 @@ object AdministrarUsuario {
 }
 
 class AdministrarUsuario extends Simulation {
-  val urlBase = "https://localhost"
+  val urlBase = "https://10.0.9.212"
   val httpConf = http
     .acceptHeader("*/*")
     .acceptEncodingHeader("gzip, deflate")
@@ -95,7 +95,7 @@ class AdministrarUsuario extends Simulation {
       login.inject(atOnceUsers(1)),
       administrarUsuario.inject(
         nothingFor(10),
-        rampUsersPerSec(1) to(5) during(1 minutes)
+        rampUsersPerSec(1) to(5) during(30 minutes)
       )
     ).protocols(httpConf)
 }
