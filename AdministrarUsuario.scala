@@ -5,11 +5,13 @@ import io.gatling.http.Predef._
 import scala.concurrent.duration._
 import io.gatling.http.response._
 
+object AdministrarUsuario {
+  var token = ""
+}
 
-  class loginPage extends Simulation {
-
+class AdministrarUsuario extends Simulation {
+  val urlBase = "https://localhost"
   val httpConf = http
-    .baseURL("https://10.0.9.212:8443/")
     .acceptHeader("*/*")
     .acceptEncodingHeader("gzip, deflate")
     .acceptLanguageHeader("en-us,en;q=0.5")
@@ -18,38 +20,30 @@ import io.gatling.http.response._
     .userAgentHeader("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.116 Safari/537.36")
 
   val credenciales = csv("credenciales.csv").random
-  val login = scenario("Administrar usuarios")
+  val login = scenario("Login")
     .feed(credenciales)
-    .exec(http("Login")
-      .post("identificacion")
+    .exec(http("Autenticacion")
+      .post(urlBase + ":8447/autenticacion")
       .header("Content-Type", "application/json; charset=UTF-8")
       .body(StringBody(
         """{
               "nombreUsuario":"${usuario}",
               "contrasenia":"${contrasenia}"
         }""")).asJSON
-      .check(status.is(201), bodyString.saveAs("bearer"))
+      .check(jsonPath("$.token").saveAs("tokenUnico"))
+      .check(status.is(201))
     )
-    .pause(4)
+   .exec((session: Session) => {
+      AdministrarUsuario.token = session("tokenUnico").as[String]
+      session
+    }).pause(4)
 
-    .exec(http("Crear perfil")
-      .post("perfiles")
-      .header("Content-Type", "application/json; charset=UTF-8")
-      .header("Authorization", "Bearer ${bearer}")
-      .body(StringBody(
-        """{
-              "nombre":"administrador",
-              "permisos":[{"id":9}]
-
-        }""")).asJSON
-            .check(status.is(201))
-    )
-    .pause(4)
-
+  val administrarUsuario = scenario("Administrar usuario")
+    .exec((session: Session) => session.set("tokenUnico", AdministrarUsuario.token))
     .exec(http("Crear usuario")
-      .post("usuario")
+      .post(urlBase + ":8443/usuario")
       .header("Content-Type", "application/json; charset=UTF-8")
-      .header("Authorization", "Bearer ${bearer}")
+      .header("Authorization", "${tokenUnico}")
       .body(StringBody(
         """{
               "identificacion":{"tipoDocumento":"pasaporte","numeroIdentificacion":"AGAH"},
@@ -60,29 +54,48 @@ import io.gatling.http.response._
               "finDeVigencia":"2014-10-30",
               "nombreUsuario":"lala","estado":"ACTIVO"
         }""")).asJSON
-            .check(status.is(201))
-    )
-    .pause(4)
+      .check(status.is(201))
+    ).pause(4)
 
-     .exec(http("Listar usuarios")
-      .get("usuario/todos")
+    .exec(http("Crear perfil")
+      .post(urlBase + ":8443/perfiles")
       .header("Content-Type", "application/json; charset=UTF-8")
-      .header("Authorization", "Bearer ${bearer}")
-      .check(status.is(200))
-    )
-    .pause(4)
+      .header("Authorization", "${tokenUnico}")
+      .body(StringBody(
+        """{
+              "nombre":"administrador",
+              "permisos":[{"id":9}]
 
-    .exec(http("paises")
-      .get("paises")
+        }""")).asJSON
+      .check(status.is(201))
+    ).pause(4)
+
+    .exec(http("Listar usuarios")
+      .get(urlBase + ":8443/usuario/todos")
       .header("Content-Type", "application/json; charset=UTF-8")
-      .header("Authorization", "Bearer ${bearer}")
+      .header("Authorization", "${tokenUnico}")
       .check(status.is(200))
-    )
-    .pause(4)
+    ).pause(4)
 
+    .exec(http("instituciones")
+      .get(urlBase + ":8443/instituciones")
+      .header("Content-Type", "application/json; charset=UTF-8")
+      .header("Authorization", "${tokenUnico}")
+      .check(status.is(200))
+    ).pause(4)
+
+    .exec(http("perfiles")
+      .get(urlBase + ":8443/perfiles")
+      .header("Content-Type", "application/json; charset=UTF-8")
+      .header("Authorization", "${tokenUnico}")
+      .check(status.is(200))
+    ).pause(4)
+  
   setUp(
-    login.inject(
-      atOnceUsers(10))
-      .protocols(httpConf)
-  )
+      login.inject(atOnceUsers(1)),
+      administrarUsuario.inject(
+        nothingFor(10),
+        rampUsersPerSec(1) to(5) during(1 minutes)
+      )
+    ).protocols(httpConf)
 }
