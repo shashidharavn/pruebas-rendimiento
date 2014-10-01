@@ -40,7 +40,7 @@ class CatalogosTitulosExtranjeros extends Simulation {
 
   val catalogo = scenario("Catalogos de registro de titulo")
     .exec((session: Session) => session.set("tokenUnico", CatalogosTitulosExtranjeros.token))
-   
+
     .exec(http("paises")
       .get(urlBase + ":8452/paises")
       .header("Content-Type", "application/json; charset=UTF-8")
@@ -49,7 +49,7 @@ class CatalogosTitulosExtranjeros extends Simulation {
     ).pause(4)
 
     .exec(http("etnias")
-      .get(urlBase + ":8443/etnias")
+      .get(urlBase + ":8455/etnias")
       .header("Content-Type", "application/json; charset=UTF-8")
       .header("Authorization", "${tokenUnico}")
       .check(status.is(200))
@@ -63,21 +63,21 @@ class CatalogosTitulosExtranjeros extends Simulation {
     ).pause(4)
 
     .exec(http("tiposDeVisa")
-      .get(urlBase + ":8443/tiposDeVisa")
+      .get(urlBase + ":8455/tiposDeVisa")
       .header("Content-Type", "application/json; charset=UTF-8")
       .header("Authorization", "${tokenUnico}")
       .check(status.is(200))
     ).pause(4)
-  
+
     .exec(http("nivelesDeFormacion")
-      .get(urlBase + ":8443/catalogos/nivelesDeFormacion")
+      .get(urlBase + ":8455/catalogos/nivelesDeFormacion")
       .header("Content-Type", "application/json; charset=UTF-8")
       .header("Authorization", "${tokenUnico}")
       .check(status.is(200))
     ).pause(4)
-  
+
     .exec(http("modalidadesDeEducacion")
-      .get(urlBase + ":8443/catalogos/modalidadesDeEducacion")
+      .get(urlBase + ":8455/catalogos/modalidadesDeEducacion")
       .header("Content-Type", "application/json; charset=UTF-8")
       .header("Authorization", "${tokenUnico}")
       .check(status.is(200))

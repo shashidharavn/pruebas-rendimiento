@@ -61,7 +61,7 @@ class AdministrarUsuario extends Simulation {
     ).pause(4)
 
     .exec(http("instituciones")
-      .get(urlBase + ":8443/instituciones")
+      .get(urlBase + ":8449/instituciones/nacionales")
       .header("Content-Type", "application/json; charset=UTF-8")
       .header("Authorization", "${tokenUnico}")
       .check(status.is(200))
@@ -92,7 +92,7 @@ class AdministrarUsuario extends Simulation {
         }""")).asJSON
       .check(status.is(201))
     ).pause(4)
-  
+
   setUp(
       login.inject(atOnceUsers(1)),
       crearUsuario.inject(nothingFor(10),
