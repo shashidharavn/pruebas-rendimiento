@@ -74,7 +74,9 @@ class AdministrarUsuario extends Simulation {
       .check(status.is(200))
     ).pause(4)
 
+  val usuarios = csv("usuarios.csv").random
   val crearUsuario = scenario("Crear usuario")
+    .feed(usuarios)
     .exec((session: Session) => session.set("tokenUnico", AdministrarUsuario.token))
     .exec(http("Crear usuario")
       .post(urlBase + ":8443/usuario")
@@ -82,21 +84,22 @@ class AdministrarUsuario extends Simulation {
       .header("Authorization", "${tokenUnico}")
       .body(StringBody(
         """{
-              "identificacion":{"tipoDocumento":"pasaporte","numeroIdentificacion":"AGAH"},
-              "nombre":{"primerNombre":"ana","primerApellido":"ana"},
-              "institucion":{"id":"2005"},"perfiles":[1],
-              "emailInstitucional":"seneteam@gmail.com",
-              "numeroAutorizacionQuipux":"SENESCYT-AB-2014-12345-MI",
-              "finDeVigencia":"2014-10-30",
-              "nombreUsuario":"lala","estado":"ACTIVO"
+          "identificacion":{"tipoDocumento":"pasaporte","numeroIdentificacion":"${pasaporte}"},
+          "nombre":{"primerNombre":"${nombre}","primerApellido":"${apellido}"},
+          "institucion":{"idInstitucion":"${institucion}"},
+          "perfiles":[1],
+          "nombreUsuario":"${usuario}",
+          "emailInstitucional":"${correo}",
+          "numeroAutorizacionQuipux":"SENESCYT-ABC-2014-12345-MI",
+          "finDeVigencia":"2014-12-29","estado":"ACTIVO"
         }""")).asJSON
       .check(status.is(201))
-    ).pause(4)
+    ).pause(8)
 
   setUp(
       login.inject(atOnceUsers(1)),
       crearUsuario.inject(nothingFor(10),
-        atOnceUsers(1)),
+        constantUsersPerSec(1) during(2 minutes)),
       administrarUsuario.inject(nothingFor(10),
         rampUsersPerSec(1) to(3) during(10 minutes))
     ).protocols(httpConf)
