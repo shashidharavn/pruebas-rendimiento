@@ -1,7 +1,7 @@
 #!/usr/bin/expect -f
-spawn ssh $env(QA_USER)@$env(QA_HOST)
+spawn ssh $QA_USER@$QA_HOST
 expect -re "assword: "
-send "$env(QA_PASSWORD)\r"
+send "\$QA_PASSWORD\r"
 send "sudo su -\r"
 send "cd /etc/init.d\r"
 send "for i in \$(ls -d servicio-*)\r"
