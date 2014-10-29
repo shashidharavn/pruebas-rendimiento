@@ -6,3 +6,5 @@ do
 echo "Reiniciando $i..."
 service $i status
 done
+exit
+exit
