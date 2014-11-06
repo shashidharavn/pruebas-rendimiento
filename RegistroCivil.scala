@@ -55,9 +55,8 @@ class RegistroCivil extends Simulation {
 
   setUp(
     login.inject(atOnceUsers(1)),
-    validarCedula.inject(
-      nothingFor(10),
-      rampUsersPerSec(1) to(5) during(60 minutes)
+    validarCedula.inject(nothingFor(5),
+      rampUsersPerSec(1) to(4) during(30 minutes)
     )
   ).protocols(httpConf)
 }
