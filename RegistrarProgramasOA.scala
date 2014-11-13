@@ -38,9 +38,7 @@ class CrearPrograma extends Simulation {
       session
     }).pause(4)
 
-  val ies = csv("ies.csv").random
   val crearPrograma = scenario("Crear Programa")
-    .feed(ies)
     .exec((session: Session) => session.set("tokenUnico", CrearPrograma.token))
     .exec(http("Crear Programa")
       .post(urlBase + ":8449/iesCursos")
