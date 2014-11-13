@@ -60,14 +60,22 @@ class AdministrarUsuario extends Simulation {
       .check(status.is(200))
     ).pause(4)
 
-    .exec(http("instituciones")
+    .exec(http("Instituciones nacionales")
       .get(urlBase + ":8449/instituciones/nacionales")
       .header("Content-Type", "application/json; charset=UTF-8")
       .header("Authorization", "${tokenUnico}")
       .check(status.is(200))
     ).pause(4)
 
-    .exec(http("perfiles")
+    .exec(http("Instituciones reguladoras")
+      .get(urlBase + ":8449/instituciones/reguladoras")
+      .header("Content-Type", "application/json; charset=UTF-8")
+      .header("Authorization", "${tokenUnico}")
+      .check(status.is(200))
+    ).pause(4)
+
+
+    .exec(http("Perfiles")
       .get(urlBase + ":8443/perfiles")
       .header("Content-Type", "application/json; charset=UTF-8")
       .header("Authorization", "${tokenUnico}")
