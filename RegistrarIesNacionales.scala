@@ -5,11 +5,11 @@ import io.gatling.http.Predef._
 import scala.concurrent.duration._
 import io.gatling.http.response._
 
-object OfertaAcademica {
+object CrearIes {
   var token = ""
 }
 
-class OfertaAcademica extends Simulation {
+class CrearIes extends Simulation {
   val urlBase = "https://10.0.9.212"
   val httpConf = http
     .acceptHeader("*/*")
@@ -34,14 +34,14 @@ class OfertaAcademica extends Simulation {
       .check(status.is(201))
     )
    .exec((session: Session) => {
-      OfertaAcademica.token = session("tokenUnico").as[String]
+      CrearIes.token = session("tokenUnico").as[String]
       session
     }).pause(4)
 
   val ies = csv("ies.csv").random
   val crearIes = scenario("Crear IES")
     .feed(ies)
-    .exec((session: Session) => session.set("tokenUnico", OfertaAcademica.token))
+    .exec((session: Session) => session.set("tokenUnico", CrearIes.token))
     .exec(http("Crear IES")
       .post(urlBase + ":8449/instituciones/nacionales")
       .header("Content-Type", "application/json; charset=UTF-8")
@@ -59,6 +59,6 @@ class OfertaAcademica extends Simulation {
   setUp(
       login.inject(atOnceUsers(1)),
       crearIes.inject(nothingFor(1),
-        rampUsersPerSec(1) to(5) during(5 minutes))
+        constantUsersPerSec(1) during(5 minutes))
     ).protocols(httpConf)
 }
