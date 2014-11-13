@@ -99,7 +99,7 @@ class AdministrarUsuario extends Simulation {
           "nombreUsuario":"${usuario}",
           "emailInstitucional":"${correo}",
           "numeroAutorizacionQuipux":"SENESCYT-ABC-2014-12345-MI",
-          "finDeVigencia":"2014-12-29","estado":"ACTIVO"
+          "finDeVigencia":"2014-12-29"
         }""")).asJSON
       .check(status.is(201))
     ).pause(8)
