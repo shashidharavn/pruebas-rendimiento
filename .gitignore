@@ -22,3 +22,4 @@ Temporary Items
 
 # Datos de prueba generados randomicamente
 data/usuarios.csv
+*.csv

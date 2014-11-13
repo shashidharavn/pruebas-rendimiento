@@ -86,9 +86,9 @@ class RegistrarExpedientes extends Simulation {
            "archivos":[{
               "tipoDocumento":{
                  "id":1,
-                 "nombre":"Identificación",
+                 "nombre":"Cédula",
                  "descripcionRequerida":false},
-              "archivoId":9
+              "archivoId":1
            }],
            "modalidad":{"id":2,"nombre":"Comité"}
         }""")).asJSON
