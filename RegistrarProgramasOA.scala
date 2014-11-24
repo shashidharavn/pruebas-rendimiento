@@ -103,7 +103,7 @@ class CrearPrograma extends Simulation {
                  "numeroTotalUnidades":1000,
                  "duracionTotal":9},
               "tiempo":9},
-           "lugresInstruccion":[{
+           "lugaresInstruccion":[{
              "estructuraGestionTerritorial":{"id":1,"nombre":"Sede Matriz"},
              "idCanton":"0801"}],
            "archivo":{
@@ -115,9 +115,9 @@ class CrearPrograma extends Simulation {
               "idArchivo":58
            },
            "requisitos":[
-              {"requisito":"Título de tercer nivel registrado en el SNIESE"},
-              {"requisito":"Suficiencia en el idioma inglés"}],
-           "menciones":[{"mencion":"mencion 1"}],
+              {"nombre":"Título de tercer nivel registrado en el SNIESE"},
+              {"nombre":"Suficiencia en el idioma inglés"}],
+           "menciones":[{"nombre":"mencion 1"}],
            "redesConvenios":[
               {"tipoVinculo":{"id":1,"tipoVinculo":"Red"},
                "areaIntereses":[
