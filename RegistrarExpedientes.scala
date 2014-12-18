@@ -51,9 +51,9 @@ class RegistrarExpedientes extends Simulation {
            "portadorTitulo":{
               "identificacion":{
                  "tipoDocumento":"pasaporte",
+                 "idCategoriaVisa":null,
                  "numeroIdentificacion":"${pasaporte}",
                  "finVigenciaPasaporte":"2014-11-25",
-                 "idCategoriaVisa":"2",
                  "finVigenciaVisa":"2015-11-04"},
               "direccion":{
                  "direccionCompleta":"aa",
