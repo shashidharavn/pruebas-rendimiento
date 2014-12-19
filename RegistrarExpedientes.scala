@@ -53,8 +53,7 @@ class RegistrarExpedientes extends Simulation {
                  "tipoDocumento":"pasaporte",
                  "idCategoriaVisa":null,
                  "numeroIdentificacion":"${pasaporte}",
-                 "finVigenciaPasaporte":"2014-11-25",
-                 "finVigenciaVisa":"2015-11-04"},
+                 "finVigenciaPasaporte":"2050-11-25"},
               "direccion":{
                  "direccionCompleta":"aa",
                  "idProvincia":"02",
@@ -73,15 +72,15 @@ class RegistrarExpedientes extends Simulation {
                  "nombreFacultadDepartamento":"La super facultad",
                  "nombrePersonaContacto":"${apellido}",
                  "emailPersonaContacto":"${correo}"},
-              "institucion":{"id":"936"},
+              "institucion":{"id":"13146"},
               "tituloAcademico":{
                  "mecanismoLegalizacionTitulo":{"tipoDeMecanismo":"NINGUNO"},
-                 "tipoDeTitulo":"ACADEMICO",
                  "nombreTitulo":"Tecnólogo en un monton de cosas",
                  "fechaTitulo":"2014-11-02",
                  "nivelDeFormacion":"TECNOLOGICO",
                  "modalidadEducacion":"PRESENCIAL"},
-              "tipo":"regular"
+              "tipo":"regular",
+              "ciudad":"Artemisa"
            },
            "archivos":[{
               "tipoDocumento":{
