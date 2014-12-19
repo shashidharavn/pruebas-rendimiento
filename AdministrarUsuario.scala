@@ -95,11 +95,12 @@ class AdministrarUsuario extends Simulation {
           "identificacion":{"tipoDocumento":"pasaporte","numeroIdentificacion":"${pasaporte}"},
           "nombre":{"primerNombre":"${nombre}","primerApellido":"${apellido}"},
           "institucion":{"idInstitucion":"${institucion}"},
-          "perfiles":[1],
+          "perfiles":[3],
           "nombreUsuario":"${usuario}",
           "emailInstitucional":"${correo}",
           "numeroAutorizacionQuipux":"SENESCYT-ABC-2014-12345-MI",
-          "finDeVigencia":"2014-12-29"
+          "finDeVigencia":"2014-12-29",
+          "tipo":"funcionario"
         }""")).asJSON
       .check(status.is(201))
     ).pause(8)
