@@ -10,7 +10,7 @@ object RegistrarProyecto {
 }
 
 class RegistrarProyecto extends Simulation {
-  val urlBase = "https://181.112.147.247"
+  val urlBase = "https://10.0.9.212"
   val httpConf = http
     .acceptHeader("*/*")
     .acceptEncodingHeader("gzip, deflate")
