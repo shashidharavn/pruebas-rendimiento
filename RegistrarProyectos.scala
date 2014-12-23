@@ -10,7 +10,7 @@ object RegistrarProyecto {
 }
 
 class RegistrarProyecto extends Simulation {
-  val urlBase = "https://10.0.9.212"
+  val urlBase = "https://181.112.147.247"
   val httpConf = http
     .acceptHeader("*/*")
     .acceptEncodingHeader("gzip, deflate")
@@ -38,9 +38,7 @@ class RegistrarProyecto extends Simulation {
       session
     }).pause(4)
 
-  val datosProyecto = csv("datosProyecto.csv").random
   val crearProyecto = scenario("Crear proyecto")
-    .feed(datosProyecto)
     .exec((session: Session) => session.set("tokenUnico", RegistrarProyecto.token))
     .exec(http("Crear proyecto")
       .post(urlBase + ":8445/proyectos")
@@ -50,8 +48,8 @@ class RegistrarProyecto extends Simulation {
         """{
           "investigadores":[
           {
-            "nombre":"${nombreInvestigador}",
-            "institucion":"${nombreInstitucion}"
+            "nombre":"Luis Gonzalez",
+            "institucion":"SENESCYT"
           }
           ],
           "outcomes":[
@@ -73,8 +71,8 @@ class RegistrarProyecto extends Simulation {
             },
             "id":"1035"
           },
-          "nombre":"${nombreProyecto}",
-          "descripcion":"${descripcionProyecto}",
+          "nombre":"Proyecto 1",
+          "descripcion":"Ejemplo de proyecto",
           "codigo":"PIC-12-SEN-123",
           "fechaInicio":"2014-12-23",
           "fechaFinalizacion":"2015-12-23",
@@ -88,9 +86,7 @@ class RegistrarProyecto extends Simulation {
               "nombre":"IES",
               "descripcion":"Institución de Educación Superior"
             },
-            "subAreas":[
-
-            ]
+            "subAreas":[]
           }
           ]
         }""")).asJSON
